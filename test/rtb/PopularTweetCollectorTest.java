@@ -1,0 +1,42 @@
+/*
+ * Copyright 2014 Kohei Yamamoto
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package rtb;
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class PopularTweetCollectorTest {
+    PopularTweetCollector sut;
+    
+    @Before
+    public void setUp() throws Exception {
+        sut = new PopularTweetCollector();
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void if_collectPopularTweets_favthreshold_is_less_than_0_then_throws_IllegalArgumentException() throws Exception {
+        sut.collectPopularTweets("", -1, "");
+    }
+
+    @Test
+    public void if_getSecondsUntilRateLimitReset_then_ret_is_equal_to_or_greater_than_0() throws Exception {
+        assertThat(sut.getSecondsUntilRateLimitReset(), is(greaterThanOrEqualTo(0)));
+    }
+}
