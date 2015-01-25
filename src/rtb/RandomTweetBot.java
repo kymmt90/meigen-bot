@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Kohei Yamamoto
+ * Copyright 2015 Kohei Yamamoto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,14 @@ public class RandomTweetBot {
     private List<String> tweets;
     private Random random;
     private String prevTweet;
+    private boolean acceptReply;
 
-    public RandomTweetBot() {
-        twitter   = TwitterFactory.getSingleton();
-        tweets    = new ArrayList<>();
-        random    = new Random(System.currentTimeMillis());
-        prevTweet = null;
+    public RandomTweetBot(final boolean reply) {
+        twitter    = TwitterFactory.getSingleton();
+        tweets     = new ArrayList<>();
+        random     = new Random(System.currentTimeMillis());
+        prevTweet  = null;
+        this.acceptReply = reply;
     }
 
     public String getTweet(final int i) {
@@ -82,8 +84,24 @@ public class RandomTweetBot {
         String tweet = null;
         do {
             tweet = getTweet(random.nextInt(getNumTweets()));
-        } while (getPrevTweet() != null && getPrevTweet().equals(tweet));
+        } while (equalsPrevTweet(tweet) || !acceptTweet(tweet));
         return tweet;
+    }
+    
+    /* package */ boolean acceptTweet(String tweet) {
+        if (acceptReply) return true;
+        else {
+            if (isReply(tweet)) return false;
+            else return true;
+        }
+    }
+    
+    /* package */ boolean equalsPrevTweet(String tweet) {
+        return getPrevTweet() != null && getPrevTweet().equals(tweet);
+    }
+    
+    /* package */ boolean isReply(String tweet) {
+        return tweet.charAt(0) == '@';
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Kohei Yamamoto
+ * Copyright 2015 Kohei Yamamoto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class RandomTweetBotTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new RandomTweetBot();
+            sut = new RandomTweetBot(true);
             retValreadJsonFile = sut.readJsonFile("test/rtb/single.json");
         }
 
@@ -80,7 +80,7 @@ public class RandomTweetBotTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new RandomTweetBot();
+            sut = new RandomTweetBot(true);
             retValreadJsonFile = sut.readJsonFile("test/rtb/multiple.json");
         }
 
@@ -129,7 +129,7 @@ public class RandomTweetBotTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new RandomTweetBot();
+            sut = new RandomTweetBot(true);
         }
 
         @Test
@@ -150,6 +150,57 @@ public class RandomTweetBotTest {
         @Test(expected = JsonProcessingException.class)
         public void readJSONFileにinvalidなJSONファイルのパスを渡すとJsonProcessingExceptionが投げられる() throws Exception {
             sut.readJsonFile("test/rtb/invalid.json");
+        }
+        
+        @Test
+        public void reply_test_true() throws Exception {
+            assertThat(sut.isReply("@test_user test"), is(true));
+        }
+        
+        @Test
+        public void reply_test_false() throws Exception {
+            assertThat(sut.isReply(".@test_user test"), is(false));
+        }
+    }
+    
+    public static class JSONファイルreplyを読み込ませreplyがtrueの場合 {
+        RandomTweetBot sut;
+        
+        @Before
+        public void setUp() throws Exception {
+            sut = new RandomTweetBot(true);
+            sut.readJsonFile("test/rtb/reply.json");
+        }
+        
+        @Test
+        public void test() throws Exception {
+            boolean reply = false, notReply = false;
+            for (int i = 0; i < 100; ++i) {
+                if (sut.nextTweet().equals("@test_user test [0 fav] [1990-01-18]")) reply = true;
+                if (sut.nextTweet().equals(".@test_user test [0 fav] [1990-01-18]")) notReply = true;
+            }
+            assertThat(reply, is(true));
+            assertThat(notReply, is(true));
+        }
+    }
+    
+    public static class JSONファイルreplyを読み込ませreplyがfalseの場合 {
+        RandomTweetBot sut;
+        
+        @Before
+        public void setUp() throws Exception {
+            sut = new RandomTweetBot(false);
+            sut.readJsonFile("test/rtb/reply.json");
+        }
+        
+        @Test
+        public void test_getTweet() throws Exception {
+            assertThat(sut.nextTweet(), is(".@test_user test [0 fav] [1990-01-18]"));
+        }
+        
+        @Test
+        public void test_acceptTweet() throws Exception {
+            assertThat(sut.acceptTweet("@test_user test [0 fav] [1990-01-18"), is(false));
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Kohei Yamamoto
+ * Copyright 2015 Kohei Yamamoto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,10 @@ public class RandomTweetBotMain {
         String screenName = properties.screenName();
         final int favThreshold = properties.favCount();
         final long intervalMinutes = properties.intervalMinutes();
+        final boolean reply = properties.reply();
 
         PopularTweetCollector collector = new PopularTweetCollector();
-        RandomTweetBot bot = new RandomTweetBot();
+        RandomTweetBot bot = new RandomTweetBot(reply);
         
         Timer timer = new Timer();
         TimerTask collectorTask

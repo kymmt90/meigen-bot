@@ -28,7 +28,7 @@ import org.junit.Test;
 public class BotPropertiesTest {
     @Test
     public void test() throws Exception {
-        InputStream stream = new ByteArrayInputStream("screenName=test_user\nfilePath=test/config.properties\nfavCount=3\nintervalMinutes=720".getBytes());
+        InputStream stream = new ByteArrayInputStream("screenName=test_user\nfilePath=test/config.properties\nfavCount=3\nintervalMinutes=720\nreply=true".getBytes());
         PropertiesLoader mockLoader = mock(PropertiesLoader.class);
         when(mockLoader.getInputStream("test")).thenReturn(stream);
         BotProperties sut = new BotProperties();
@@ -38,5 +38,6 @@ public class BotPropertiesTest {
         assertThat(sut.filePath(), is("test/config.properties"));
         assertThat(sut.favCount(), is(3));
         assertThat(sut.intervalMinutes(), is(720L));
+        assertThat(sut.reply(), is(true));
     }
 }

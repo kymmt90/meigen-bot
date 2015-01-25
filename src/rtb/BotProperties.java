@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Kohei Yamamoto
+ * Copyright 2015 Kohei Yamamoto
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,4 +50,9 @@ public class BotProperties {
     public final long intervalMinutes() {
         return Long.parseLong(properties.getProperty("intervalMinutes"));
     }
+    
+    public final boolean reply() {
+        return Boolean.parseBoolean(properties.getProperty("reply"));
+    }
+            
 }
