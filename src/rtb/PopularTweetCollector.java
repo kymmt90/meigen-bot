@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,9 +73,8 @@ public class PopularTweetCollector {
         for (int page = 1; ; ++page) {
             List<Status> statuses = twitter.getUserTimeline(userScreenName, new Paging(page, 200));
             if (statuses.size() == 0) return tweets;
-            for (Status s : statuses) {
-                if (s.getFavoriteCount() >= favThreshold) tweets.add(s);
-            }
+            tweets.addAll(statuses.stream().filter(s -> s.getFavoriteCount() >= favThreshold)
+                                           .collect(Collectors.toList()));
         }
     }
         
