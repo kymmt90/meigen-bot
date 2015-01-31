@@ -36,14 +36,14 @@ public class RandomTweetBot {
     private List<String> tweets;
     private Random random;
     private String prevTweet;
-    private boolean acceptReply;
+    private boolean allowsReply;
 
     public RandomTweetBot(final boolean reply) {
         twitter    = TwitterFactory.getSingleton();
         tweets     = new ArrayList<>();
         random     = new Random(System.currentTimeMillis());
         prevTweet  = null;
-        this.acceptReply = reply;
+        this.allowsReply = reply;
     }
 
     public String getTweet(final int i) {
@@ -84,20 +84,16 @@ public class RandomTweetBot {
         String tweet = null;
         do {
             tweet = getTweet(random.nextInt(getNumTweets()));
-        } while (equalsPrevTweet(tweet) || !acceptTweet(tweet));
+        } while (equalsPrevTweet(tweet) || !allows(tweet));
         return tweet;
-    }
-    
-    /* package */ boolean acceptTweet(String tweet) {
-        if (acceptReply) return true;
-        else {
-            if (isReply(tweet)) return false;
-            else return true;
-        }
     }
     
     /* package */ boolean equalsPrevTweet(String tweet) {
         return getPrevTweet() != null && getPrevTweet().equals(tweet);
+    }
+    
+    /* package */ boolean allows(String tweet) {
+        return allowsReply || !isReply(tweet);
     }
     
     /* package */ boolean isReply(String tweet) {

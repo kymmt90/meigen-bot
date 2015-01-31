@@ -200,7 +200,7 @@ public class RandomTweetBotTest {
         
         @Test
         public void test_acceptTweet() throws Exception {
-            assertThat(sut.acceptTweet("@test_user test [0 fav] [1990-01-18"), is(false));
+            assertThat(sut.allows("@test_user test [0 fav] [1990-01-18"), is(false));
         }
     }
 }
