@@ -32,7 +32,7 @@ public class BotProperties {
         if (fileName == null) throw new NullPointerException();
         InputStream stream = loader.getInputStream(fileName);
         if (stream == null) throw new NullPointerException();
-        properties.load(loader.getInputStream(fileName));
+        properties.load(stream);
     }
     
     public String screenName() {
