@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Tweet {
-    private String text;
+    private Text text;
     private String date;
     private int favoritesCount;
     
@@ -28,13 +28,13 @@ public class Tweet {
     public Tweet(@JsonProperty("text") String text,
                  @JsonProperty("date") String date,
                  @JsonProperty("favorites_count") int favoritesCount) {
-        this.text = text;
+        this.text = new Text(text);
         this.date = date;
         this.favoritesCount = favoritesCount;
     }
 
     public String getText() {
-        return text;
+        return text.toString();
     }
 
     public String getDate() {
@@ -48,10 +48,10 @@ public class Tweet {
     
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();    
-        builder.append(text)
-            .append(" [").append(favoritesCount).append(" fav]")
-            .append(" [").append(date).append("]");     
+        StringBuilder builder = new StringBuilder();
+        text.addTo(builder);
+        builder.append(" [").append(favoritesCount).append(" fav]")
+               .append(" [").append(date).append("]");     
         return builder.toString();
     }
 }
