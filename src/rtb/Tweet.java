@@ -19,15 +19,15 @@ package rtb;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TweetPojo {
+public class Tweet {
     private String text;
     private String date;
     private int favoritesCount;
     
     @JsonCreator
-    public TweetPojo(@JsonProperty("text") String text,
-                     @JsonProperty("date") String date,
-                     @JsonProperty("favorites_count") int favoritesCount) {
+    public Tweet(@JsonProperty("text") String text,
+                 @JsonProperty("date") String date,
+                 @JsonProperty("favorites_count") int favoritesCount) {
         this.text = text;
         this.date = date;
         this.favoritesCount = favoritesCount;

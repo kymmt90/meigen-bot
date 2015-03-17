@@ -71,7 +71,7 @@ public class RandomTweetBot {
      */
     public int readJsonFile(String fileName) throws JsonProcessingException, IOException {
         ObjectMapper    mapper = new ObjectMapper();
-        List<TweetPojo> pojos  = mapper.readValue(new File(fileName), new TypeReference<List<TweetPojo>>() {});
+        List<Tweet> pojos  = mapper.readValue(new File(fileName), new TypeReference<List<Tweet>>() {});
         tweets = pojos.stream().map(p -> p.toString()).collect(Collectors.toList());
         return tweets.size();
     }

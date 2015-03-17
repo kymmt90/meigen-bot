@@ -90,7 +90,7 @@ public class PopularTweetCollector {
         if (statuses.isEmpty()) return;
 
         // Convert Status to TweetPojo
-        List<TweetPojo> pojos = new ArrayList<>(statuses.size());
+        List<Tweet> pojos = new ArrayList<>(statuses.size());
         for (Status s : statuses) {
             // Get tweet text
             String text = s.getText().replaceAll("[\n\t]", " ");
@@ -99,7 +99,7 @@ public class PopularTweetCollector {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String date = formatter.format(s.getCreatedAt());
             
-            pojos.add(new TweetPojo(text, date, s.getFavoriteCount()));
+            pojos.add(new Tweet(text, date, s.getFavoriteCount()));
         }
         
         // Write out TweetPojo as JSON
