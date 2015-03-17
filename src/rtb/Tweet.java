@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Tweet {
     private Text text;
     private TweetDate date;
-    private int favoritesCount;
+    private FavoritesCount favoritesCount;
     
     @JsonCreator
     public Tweet(@JsonProperty("text") String text,
@@ -32,13 +32,13 @@ public class Tweet {
                  @JsonProperty("favorites_count") int favoritesCount) {
         this.text = new Text(text);
         this.date = new TweetDate(date);
-        this.favoritesCount = favoritesCount;
+        this.favoritesCount = new FavoritesCount(favoritesCount);
     }
     
     public Tweet(String text, Date date, int favoritesCount) {
         this.text = new Text(text);
         this.date = new TweetDate(date);
-        this.favoritesCount = favoritesCount;
+        this.favoritesCount = new FavoritesCount(favoritesCount);
     }
 
     public String getText() {
@@ -51,14 +51,15 @@ public class Tweet {
 
     @JsonProperty("favorites_count")
     public int getFavoritesCount() {
-        return favoritesCount;
+        return favoritesCount.toValue();
     }
     
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         text.addTo(builder);
-        builder.append(" [").append(favoritesCount).append(" fav]");
+        builder.append(" ");
+        favoritesCount.addTo(builder);
         builder.append(" ");
         date.addTo(builder);       
         return builder.toString();
