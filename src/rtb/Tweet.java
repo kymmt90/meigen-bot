@@ -16,12 +16,14 @@
 
 package rtb;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Tweet {
     private Text text;
-    private String date;
+    private TweetDate date;
     private int favoritesCount;
     
     @JsonCreator
@@ -29,7 +31,13 @@ public class Tweet {
                  @JsonProperty("date") String date,
                  @JsonProperty("favorites_count") int favoritesCount) {
         this.text = new Text(text);
-        this.date = date;
+        this.date = new TweetDate(date);
+        this.favoritesCount = favoritesCount;
+    }
+    
+    public Tweet(String text, Date date, int favoritesCount) {
+        this.text = new Text(text);
+        this.date = new TweetDate(date);
         this.favoritesCount = favoritesCount;
     }
 
@@ -38,7 +46,7 @@ public class Tweet {
     }
 
     public String getDate() {
-        return date;
+        return date.toString();
     }
 
     @JsonProperty("favorites_count")
@@ -50,8 +58,9 @@ public class Tweet {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         text.addTo(builder);
-        builder.append(" [").append(favoritesCount).append(" fav]")
-               .append(" [").append(date).append("]");     
+        builder.append(" [").append(favoritesCount).append(" fav]");
+        builder.append(" ");
+        date.addTo(builder);       
         return builder.toString();
     }
 }
