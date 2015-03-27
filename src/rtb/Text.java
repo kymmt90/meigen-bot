@@ -31,6 +31,10 @@ class Text {
         builder.append(text);
     }
     
+    boolean isReply() {
+        return text.charAt(0) == '@';
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(text);

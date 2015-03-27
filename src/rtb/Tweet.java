@@ -52,6 +52,10 @@ public class Tweet {
         return meta.getFavoritesCount();
     }
     
+    public boolean isReply() {
+        return text.isReply();
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(text);
