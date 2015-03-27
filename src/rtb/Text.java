@@ -16,6 +16,8 @@
 
 package rtb;
 
+import java.util.Objects;
+
 class Text {
     private String text;
     
@@ -29,6 +31,23 @@ class Text {
         builder.append(text);
     }
     
+    @Override
+    public int hashCode() {
+        return Objects.hash(text);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object)
+            return true;
+        if (object == null)
+            return false;
+        if (getClass() != object.getClass())
+            return false;
+        Text other = (Text)object;
+        return Objects.equals(text, other);
+    }
+
     @Override
     public String toString() {
         return text;

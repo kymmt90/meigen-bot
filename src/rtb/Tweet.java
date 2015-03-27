@@ -17,6 +17,7 @@
 package rtb;
 
 import java.util.Date;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -51,6 +52,23 @@ public class Tweet {
         return meta.getFavoritesCount();
     }
     
+    @Override
+    public int hashCode() {
+        return Objects.hash(text);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object)
+            return true;
+        if (object == null)
+            return false;
+        if (getClass() != object.getClass())
+            return false;
+        Tweet other = (Tweet)object;
+        return Objects.equals(text, other);
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
