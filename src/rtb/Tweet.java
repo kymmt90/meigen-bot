@@ -23,22 +23,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Tweet {
     private Text text;
-    private TweetDate date;
-    private FavoritesCount favoritesCount;
+    private MetaData meta;
     
     @JsonCreator
     public Tweet(@JsonProperty("text") String text,
                  @JsonProperty("date") String date,
                  @JsonProperty("favorites_count") int favoritesCount) {
         this.text = new Text(text);
-        this.date = new TweetDate(date);
-        this.favoritesCount = new FavoritesCount(favoritesCount);
+        this.meta = new MetaData(date, favoritesCount);
     }
     
     public Tweet(String text, Date date, int favoritesCount) {
         this.text = new Text(text);
-        this.date = new TweetDate(date);
-        this.favoritesCount = new FavoritesCount(favoritesCount);
+        this.meta = new MetaData(date, favoritesCount);
     }
 
     public String getText() {
@@ -46,12 +43,12 @@ public class Tweet {
     }
 
     public String getDate() {
-        return date.toString();
+        return meta.getDate();
     }
 
     @JsonProperty("favorites_count")
     public int getFavoritesCount() {
-        return favoritesCount.toValue();
+        return meta.getFavoritesCount();
     }
     
     @Override
@@ -59,9 +56,9 @@ public class Tweet {
         StringBuilder builder = new StringBuilder();
         text.addTo(builder);
         builder.append(" ");
-        favoritesCount.addTo(builder);
+        meta.addFavoritesCountTo(builder);
         builder.append(" ");
-        date.addTo(builder);       
+        meta.addDateTo(builder);
         return builder.toString();
     }
 }
