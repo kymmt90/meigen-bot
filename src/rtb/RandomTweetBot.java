@@ -53,10 +53,6 @@ public class RandomTweetBot {
         return tweets.size();
     }
 
-    public Tweet getPreviousTweet() {
-        return previousTweet;
-    }
-
     public void setPrevTweet(Tweet tweet) {
         previousTweet = tweet;
     }
@@ -87,7 +83,7 @@ public class RandomTweetBot {
     }
     
     /* package */ boolean equalsPreviousTweet(Tweet tweet) {
-        return getPreviousTweet() != null && getPreviousTweet().equals(tweet);
+        return previousTweet != null && previousTweet.equals(tweet);
     }
     
     /* package */ boolean allows(Tweet tweet) {
