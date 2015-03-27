@@ -53,12 +53,6 @@ public class RandomTweetBotTest {
         }
 
         @Test
-        public void getNumTweetsで1が返る() throws Exception {
-            int actual = sut.getNumTweets();
-            assertThat(actual, is(1));
-        }
-
-        @Test
         public void getTweetで1が返る() throws Exception {
             String actual = sut.getTweet(0).toString();
             assertThat(actual, is("1 [0 fav] [1990-01-18]"));
@@ -88,12 +82,6 @@ public class RandomTweetBotTest {
         @Test
         public void readJsonFileで2が返る() throws Exception {
             assertThat(retValreadJsonFile, is(2));
-        }
-
-        @Test
-        public void getNumTweetsで2が返る() throws Exception {
-            int actual = sut.getNumTweets();
-            assertThat(actual, is(2));
         }
 
         @Test
@@ -131,12 +119,6 @@ public class RandomTweetBotTest {
         @Before
         public void setUp() throws Exception {
             sut = new RandomTweetBot(true);
-        }
-
-        @Test
-        public void インスタンス生成時にtweetsはsize0でprevTweetはnull() throws Exception {
-            assertThat(sut.getNumTweets(), is(0));
-            assertThat(sut.getPreviousTweet(), is(nullValue()));
         }
 
         @Test(expected = JsonMappingException.class)

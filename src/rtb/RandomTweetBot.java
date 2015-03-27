@@ -49,10 +49,6 @@ public class RandomTweetBot {
         return tweets.get(i);
     }
 
-    public int getNumTweets() {
-        return tweets.size();
-    }
-
     public void setPrevTweet(Tweet tweet) {
         previousTweet = tweet;
     }
@@ -77,7 +73,7 @@ public class RandomTweetBot {
     public Tweet nextTweet() {
         Tweet tweet = null;
         do {
-            tweet = getTweet(random.nextInt(getNumTweets()));
+            tweet = getTweet(random.nextInt(tweets.size()));
         } while (equalsPreviousTweet(tweet) || !allows(tweet));
         return tweet;
     }
