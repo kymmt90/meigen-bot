@@ -18,6 +18,7 @@ package rtb;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
 import java.io.IOException;
 
 import org.junit.Before;
@@ -47,7 +48,7 @@ public class RandomTweetBotTest {
 
         @Test
         public void nextTweetでテキスト1が返る() throws Exception {
-            String actual = sut.nextTweet();
+            String actual = sut.nextTweet().toString();
             assertThat(actual, is("1 [0 fav] [1990-01-18]"));
         }
 
@@ -59,7 +60,7 @@ public class RandomTweetBotTest {
 
         @Test
         public void getTweetで1が返る() throws Exception {
-            String actual = sut.getTweet(0);
+            String actual = sut.getTweet(0).toString();
             assertThat(actual, is("1 [0 fav] [1990-01-18]"));
         }
 
@@ -97,20 +98,20 @@ public class RandomTweetBotTest {
 
         @Test
         public void getTweetに引数0で1が得られる() throws Exception {
-            assertThat(sut.getTweet(0), is("1 [0 fav] [1990-01-18]"));
+            assertThat(sut.getTweet(0).toString(), is("1 [0 fav] [1990-01-18]"));
         }
 
         @Test
         public void getTweetに引数1で2が得られる() throws Exception {
-            assertThat(sut.getTweet(1), is("2 [0 fav] [1990-01-18]"));
+            assertThat(sut.getTweet(1).toString(), is("2 [0 fav] [1990-01-18]"));
         }
 
         @Test
         public void extTweetでテキスト1か2が返る() throws Exception {
             boolean one = false, two = false;
             for (int i = 0; i < 100; ++i) {
-                if (sut.nextTweet().equals("1 [0 fav] [1990-01-18]")) one = true;
-                if (sut.nextTweet().equals("2 [0 fav] [1990-01-18]")) two = true;
+                if (sut.nextTweet().toString().equals("1 [0 fav] [1990-01-18]")) one = true;
+                if (sut.nextTweet().toString().equals("2 [0 fav] [1990-01-18]")) two = true;
             }
             assertThat(one, is(true));
             assertThat(two, is(true));
@@ -118,8 +119,8 @@ public class RandomTweetBotTest {
 
         @Test
         public void nextTweetでprevTweetと異なるツイートが返る() throws Exception {
-            sut.setPrevTweet("1");
-            String actual = sut.nextTweet();
+            sut.setPrevTweet(new Tweet("1", "1990-01-18", 0));
+            String actual = sut.nextTweet().toString();
             assertThat(actual, is(not("1")));
         }
     }
@@ -135,7 +136,7 @@ public class RandomTweetBotTest {
         @Test
         public void インスタンス生成時にtweetsはsize0でprevTweetはnull() throws Exception {
             assertThat(sut.getNumTweets(), is(0));
-            assertThat(sut.getPrevTweet(), is(nullValue()));
+            assertThat(sut.getPreviousTweet(), is(nullValue()));
         }
 
         @Test(expected = JsonMappingException.class)
@@ -150,16 +151,6 @@ public class RandomTweetBotTest {
         @Test(expected = JsonProcessingException.class)
         public void readJSONFileにinvalidなJSONファイルのパスを渡すとJsonProcessingExceptionが投げられる() throws Exception {
             sut.readJsonFile("test/rtb/invalid.json");
-        }
-        
-        @Test
-        public void reply_test_true() throws Exception {
-            assertThat(sut.isReply("@test_user test"), is(true));
-        }
-        
-        @Test
-        public void reply_test_false() throws Exception {
-            assertThat(sut.isReply(".@test_user test"), is(false));
         }
     }
     
@@ -176,8 +167,8 @@ public class RandomTweetBotTest {
         public void test() throws Exception {
             boolean reply = false, notReply = false;
             for (int i = 0; i < 100; ++i) {
-                if (sut.nextTweet().equals("@test_user test [0 fav] [1990-01-18]")) reply = true;
-                if (sut.nextTweet().equals(".@test_user test [0 fav] [1990-01-18]")) notReply = true;
+                if (sut.nextTweet().toString().equals("@test_user test [0 fav] [1990-01-18]")) reply = true;
+                if (sut.nextTweet().toString().equals(".@test_user test [0 fav] [1990-01-18]")) notReply = true;
             }
             assertThat(reply, is(true));
             assertThat(notReply, is(true));
@@ -195,12 +186,12 @@ public class RandomTweetBotTest {
         
         @Test
         public void test_getTweet() throws Exception {
-            assertThat(sut.nextTweet(), is(".@test_user test [0 fav] [1990-01-18]"));
+            assertThat(sut.nextTweet().toString(), is(".@test_user test [0 fav] [1990-01-18]"));
         }
         
         @Test
         public void test_acceptTweet() throws Exception {
-            assertThat(sut.allows("@test_user test [0 fav] [1990-01-18"), is(false));
+            assertThat(sut.allows(new Tweet("@test_user test", "1990-01-18", 0)), is(false));
         }
     }
 }

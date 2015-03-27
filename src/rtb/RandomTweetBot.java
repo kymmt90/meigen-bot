@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -33,20 +32,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RandomTweetBot {
     private Twitter twitter;
-    private List<String> tweets;
+    private List<Tweet> tweets;
     private Random random;
-    private String prevTweet;
+    private Tweet previousTweet;
     private boolean allowsReply;
 
     public RandomTweetBot(final boolean reply) {
-        twitter    = TwitterFactory.getSingleton();
-        tweets     = new ArrayList<>();
-        random     = new Random(System.currentTimeMillis());
-        prevTweet  = null;
-        this.allowsReply = reply;
+        twitter       = TwitterFactory.getSingleton();
+        tweets        = new ArrayList<>();
+        random        = new Random(System.currentTimeMillis());
+        previousTweet = null;
+        allowsReply   = reply;
     }
 
-    public String getTweet(final int i) {
+    public Tweet getTweet(final int i) {
         return tweets.get(i);
     }
 
@@ -54,12 +53,12 @@ public class RandomTweetBot {
         return tweets.size();
     }
 
-    public String getPrevTweet() {
-        return prevTweet;
+    public Tweet getPreviousTweet() {
+        return previousTweet;
     }
 
-    public void setPrevTweet(String tweet) {
-        prevTweet = tweet;
+    public void setPrevTweet(Tweet tweet) {
+        previousTweet = tweet;
     }
 
     /**
@@ -70,9 +69,8 @@ public class RandomTweetBot {
      * @throws IOException
      */
     public int readJsonFile(String fileName) throws JsonProcessingException, IOException {
-        ObjectMapper    mapper = new ObjectMapper();
-        List<Tweet> pojos  = mapper.readValue(new File(fileName), new TypeReference<List<Tweet>>() {});
-        tweets = pojos.stream().map(p -> p.toString()).collect(Collectors.toList());
+        ObjectMapper mapper = new ObjectMapper();
+        tweets = mapper.readValue(new File(fileName), new TypeReference<List<Tweet>>() {});
         return tweets.size();
     }
 
@@ -80,39 +78,35 @@ public class RandomTweetBot {
      * Get a tweet randomly from tweets list in this class. For avoiding duplicated error, use the tweet that is different from previous one.
      * @return tweet text
      */
-    public String nextTweet() {
-        String tweet = null;
+    public Tweet nextTweet() {
+        Tweet tweet = null;
         do {
             tweet = getTweet(random.nextInt(getNumTweets()));
-        } while (equalsPrevTweet(tweet) || !allows(tweet));
+        } while (equalsPreviousTweet(tweet) || !allows(tweet));
         return tweet;
     }
     
-    /* package */ boolean equalsPrevTweet(String tweet) {
-        return getPrevTweet() != null && getPrevTweet().equals(tweet);
+    /* package */ boolean equalsPreviousTweet(Tweet tweet) {
+        return getPreviousTweet() != null && getPreviousTweet().equals(tweet);
     }
     
-    /* package */ boolean allows(String tweet) {
-        return allowsReply || !isReply(tweet);
+    /* package */ boolean allows(Tweet tweet) {
+        return allowsReply || !tweet.isReply();
     }
     
-    /* package */ boolean isReply(String tweet) {
-        return tweet.charAt(0) == '@';
-    }
-
     /**
      * Update twitter status with a random tweet from the list in this class. 
      * @return the updated tweet
      * @throws TwitterException
      */
     public String updateNextTweet() throws TwitterException {
-        String tweet = nextTweet();
+        Tweet tweet = nextTweet();
         setPrevTweet(tweet);
         return updateStatus(tweet);
     }
     
-    /* package */ String updateStatus(String status) throws TwitterException {
-        if (status == null) throw new IllegalArgumentException();
-        return twitter.updateStatus(status).getText();
+    /* package */ String updateStatus(Tweet tweet) throws TwitterException {
+        if (tweet == null) throw new IllegalArgumentException();
+        return twitter.updateStatus(tweet.toString()).getText();
     }
 }
