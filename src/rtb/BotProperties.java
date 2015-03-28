@@ -18,41 +18,56 @@ package rtb;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 public class BotProperties {
     /*package*/ PropertiesLoader loader = new PropertiesLoader();
-    private Properties properties;
+    private PropertiesConfiguration properties;
     
     public BotProperties() { 
-        this.properties = new Properties();
+        this.properties = new PropertiesConfiguration();
     }
     
-    public void load(String fileName) throws IOException {
+    public void load(String fileName) throws IOException, ConfigurationException {
         if (fileName == null) throw new NullPointerException();
         InputStream stream = loader.getInputStream(fileName);
         if (stream == null) throw new NullPointerException();
-        properties.load(stream);
+        properties.load(new InputStreamReader(stream));
+        if (!isValid()) throw new IllegalStateException();
     }
     
-    public String screenName() {
-        return properties.getProperty("screenName");
+    private boolean isValid() {
+        final int namesListSize = properties.getList("screenName").size();
+        final int CountListSize = properties.getList("favCount").size();
+        return namesListSize == CountListSize;
+    }
+    
+    public List<String> screenName() {
+        return Arrays.asList(properties.getStringArray("screenName"));
     }
     
     public String filePath() {
-        return properties.getProperty("filePath");
+        return properties.getString("filePath");
     }
     
-    public final int favCount() {
-        return Integer.parseInt(properties.getProperty("favCount"));
+    public List<Integer> favCount() {
+        List<Object> favCounts = properties.getList("favCount");
+        return favCounts.stream().map(Object::toString)
+                                 .map(Integer::valueOf)
+                                 .collect(Collectors.toList());
     }
     
     public final long intervalMinutes() {
-        return Long.parseLong(properties.getProperty("intervalMinutes"));
+        return properties.getLong("intervalMinutes");
     }
     
-    public final boolean reply() {
-        return Boolean.parseBoolean(properties.getProperty("reply"));
+    public boolean reply() {
+        return properties.getBoolean("reply");
     }
-            
 }

@@ -17,6 +17,7 @@
 package rtb;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -25,21 +26,25 @@ import twitter4j.TwitterException;
 
 public class PopularTweetCollectorTask extends TimerTask {
     private String fileName;
-    private String targetUserScreenName;
-    private final int favThreshold;
+    private List<String> screenNames;
+    private List<Integer> favThresholds;
     private PopularTweetCollector collector;
 
-    public PopularTweetCollectorTask(String fileName, String targetUserScreenName, final int favThreshold, PopularTweetCollector collector) {
+    public PopularTweetCollectorTask(String fileName, List<String> screenNames,
+                                     List<Integer> favThresholds, PopularTweetCollector collector) {
         this.fileName = fileName;
-        this.targetUserScreenName = targetUserScreenName;
-        this.favThreshold = favThreshold;
+        this.screenNames = screenNames;
+        this.favThresholds = favThresholds;
         this.collector = collector;
     }
 
     @Override
     public void run() {
         try {
-            List<Status> tweets = collector.collectPopularTweets(targetUserScreenName, favThreshold, fileName);
+            List<Status> tweets = new ArrayList<>();
+            for (int i = 0; i < screenNames.size(); ++i) {
+                tweets.addAll(collector.collectPopularTweets(screenNames.get(i), favThresholds.get(i), fileName));
+            }
             collector.writeAsJson(tweets, fileName);
         } catch (IOException ioe) {
             ioe.printStackTrace();

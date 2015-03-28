@@ -17,9 +17,12 @@
 package rtb;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.configuration.ConfigurationException;
 
 public class RandomTweetBotMain {
     public static void main(String[] args) {
@@ -33,22 +36,24 @@ public class RandomTweetBotMain {
             properties.load(args[0]);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
         }
         
         String filePath = properties.filePath();
-        String screenName = properties.screenName();
-        final int favThreshold = properties.favCount();
+        List<String> screenNames = properties.screenName();
+        List<Integer> favThresholds = properties.favCount();
         final long intervalMinutes = properties.intervalMinutes();
-        final boolean reply = properties.reply();
+        boolean reply = properties.reply();
 
         PopularTweetCollector collector = new PopularTweetCollector();
         RandomTweetBot bot = new RandomTweetBot(reply);
         
         Timer timer = new Timer();
         TimerTask collectorTask
-            = new PopularTweetCollectorTask(filePath, screenName, favThreshold, collector);
+            = new PopularTweetCollectorTask(filePath, screenNames, favThresholds, collector);
         TimerTask botTask = new RandomTweetBotTask(filePath, bot);
         timer.scheduleAtFixedRate(collectorTask, 0L, TimeUnit.DAYS.toMillis(1L));
-        timer.scheduleAtFixedRate(botTask, TimeUnit.SECONDS.toMillis(30L), TimeUnit.MINUTES.toMillis(intervalMinutes));
+        timer.scheduleAtFixedRate(botTask, TimeUnit.SECONDS.toMillis(3L), TimeUnit.MINUTES.toMillis(intervalMinutes));
     }
 }
