@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Tweet {
@@ -52,6 +53,7 @@ public class Tweet {
         return meta.getFavoritesCount();
     }
     
+    @JsonIgnore
     public boolean isReply() {
         return text.isReply();
     }
