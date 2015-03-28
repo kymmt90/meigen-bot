@@ -2,7 +2,7 @@
 
 ## 概要
 
-- 指定 Twitter ユーザのツイートから閾値以上の fav 数のツイートを収集
+- 指定 Twitter ユーザのツイートから閾値以上のお気に入り数のツイートを収集
 - その中からランダムにツイート
 
 ## 必要環境
@@ -12,11 +12,13 @@
 
 ## 前準備
 
-Twitter アカウントの consumer key, access token を取得する。以下の通りプロパティファイルを作成する。
+まず、Twitter アカウントの consumer key, access token を取得しておく。
 
-### `twitter4j.properties`
+Bot を動作させるために、以下のプロパティファイルを作成する。
 
-以下のように設定する。
+### Twitter4J 用プロパティファイル
+
+内部で利用しているライブラリ [Twitter4J](http://twitter4j.org/ja/index.html) のために、`twitter4j.properties` という名前のプロパティファイルを作成する。設定項目は以下の通り。
 
     debug=false
     oauth.consumerKey=<consumer key>
@@ -24,19 +26,27 @@ Twitter アカウントの consumer key, access token を取得する。以下�
     oauth.accessToken=<access token>
     oauth.accessTokenSecret=<access token secret>
 
-ディレクトリ `random-tweet-bot` 直下に保存する。
+`twitter4j.properties` は Bot 実行時のカレントディレクトリに保存する。
 
-### Bot 用のプロパティファイル
+### Bot 用プロパティファイル
 
-以下のように設定する。
+Bot の動作設定用のプロパティファイルを作成する。ファイル名は任意。設定項目は以下の通り。
 
-    screenName=<ユーザ ID>
-    filePath=<収集したツイートデータ保存パス>
-    favCount=<収集するツイートの fav 閾値>
-    intervalMinutes=<ツイートの時間間隔（分）>
+    screenName=<ツイートを収集するユーザのスクリーンネーム（カンマ区切りで複数指定可）>
+    favCount=<各ユーザから収集するツイートのお気に入り数閾値（カンマ区切りで複数指定可）>
+    filePath=<収集した JSON 形式ツイートデータの保存パス>
+    intervalMinutes=<Bot のツイート時間間隔（分）>
 	reply=<リプライをツイートするなら true, そうでないなら false>
 
-保存場所は任意である。
+`screenName` と `favCount` の中の要素は対応しているため、設定する要素数は同じにする。例えば、以下のように設定する。
+
+    screenName=user1,user2
+	favCount=2,3
+	filePath=path/to/file.json
+	intervalMinutes=60
+	reply=false
+
+この場合、`user1` のお気に入り数 `2` 以上のツイートと、`user2` のお気に入り数 `3` 以上のツイートを収集する。
 
 ## ビルド
 
@@ -44,7 +54,7 @@ Twitter アカウントの consumer key, access token を取得する。以下�
 
 ## 実行
 
-    $ java -jar random-tweet-bot-<version>.jar <プロパティファイルのパス>
+    $ java -jar random-tweet-bot-<version>.jar <Bot 用プロパティファイルのパス>
 
 ## ライセンス
 
