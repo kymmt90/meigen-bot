@@ -24,6 +24,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({BotPropertiesTest.class,
                PopularTweetCollectorTest.class,
                RandomTweetBotTest.class,
-               TextTest.class})
+               TextTest.class,
+               TweetDateTest.class})
 public class AllTests {
 }
