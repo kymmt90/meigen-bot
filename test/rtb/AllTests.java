@@ -23,6 +23,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({BotPropertiesTest.class,
                PopularTweetCollectorTest.class,
-               RandomTweetBotTest.class})
+               RandomTweetBotTest.class,
+               TextTest.class})
 public class AllTests {
 }
