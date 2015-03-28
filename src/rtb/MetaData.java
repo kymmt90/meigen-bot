@@ -19,17 +19,24 @@ package rtb;
 import java.util.Date;
 
 class MetaData {
+    private ScreenName screenName; 
     private TweetDate date;
     private FavoritesCount favoritesCount;
     
-    MetaData(String date, int favoritesCount) {
+    MetaData(String screenName, String date, int favoritesCount) {
+        this.screenName = new ScreenName(screenName);
         this.date = new TweetDate(date);
         this.favoritesCount = new FavoritesCount(favoritesCount);
     }
     
-    MetaData(Date date, int favoritesCount) {
+    MetaData(String screenName, Date date, int favoritesCount) {
+        this.screenName = new ScreenName(screenName);
         this.date = new TweetDate(date);
         this.favoritesCount = new FavoritesCount(favoritesCount);
+    }
+    
+    String getScreenName() {
+        return screenName.toString();
     }
     
     String getDate() {
@@ -38,6 +45,10 @@ class MetaData {
     
     int getFavoritesCount() {
         return favoritesCount.toValue();
+    }
+    
+    void addScreenNameTo(StringBuilder builder) {
+        screenName.addTo(builder);
     }
     
     void addDateTo(StringBuilder builder) {

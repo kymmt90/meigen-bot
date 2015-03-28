@@ -99,7 +99,9 @@ public class PopularTweetCollector {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String date = formatter.format(s.getCreatedAt());
             
-            pojos.add(new Tweet(text, date, s.getFavoriteCount()));
+            String screenName = s.getUser().getScreenName();
+            
+            pojos.add(new Tweet(screenName, text, date, s.getFavoriteCount()));
         }
         
         // Write out TweetPojo as JSON

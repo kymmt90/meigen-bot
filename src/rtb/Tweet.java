@@ -28,18 +28,23 @@ public class Tweet {
     private MetaData meta;
     
     @JsonCreator
-    public Tweet(@JsonProperty("text") String text,
+    public Tweet(@JsonProperty("screenName") String screenName,
+                 @JsonProperty("text") String text,
                  @JsonProperty("date") String date,
                  @JsonProperty("favorites_count") int favoritesCount) {
         this.text = new Text(text);
-        this.meta = new MetaData(date, favoritesCount);
+        this.meta = new MetaData(screenName, date, favoritesCount);
     }
     
-    public Tweet(String text, Date date, int favoritesCount) {
+    public Tweet(String screenName, String text, Date date, int favoritesCount) {
         this.text = new Text(text);
-        this.meta = new MetaData(date, favoritesCount);
+        this.meta = new MetaData(screenName, date, favoritesCount);
     }
 
+    public String getScreenName() {
+        return meta.getScreenName();
+    }
+    
     public String getText() {
         return text.toString();
     }
@@ -79,6 +84,8 @@ public class Tweet {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         text.addTo(builder);
+        builder.append(" ");
+        meta.addScreenNameTo(builder);
         builder.append(" ");
         meta.addFavoritesCountTo(builder);
         builder.append(" ");
