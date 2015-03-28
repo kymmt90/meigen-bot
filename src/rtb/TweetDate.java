@@ -42,7 +42,12 @@ class TweetDate {
     void addTo(StringBuilder builder) {
         if (builder == null) throw new NullPointerException();
         builder.append("[")
-               .append(date.format(formatter))
+               .append(this.toString())
                .append("]");
+    }
+    
+    @Override
+    public String toString() {
+        return date.format(formatter);
     }
 }
