@@ -27,11 +27,16 @@ class FavoritesCount {
     void addTo(StringBuilder builder) {
         if (builder == null) throw new NullPointerException();
         builder.append("[")
-               .append(favoritesCount)
+               .append(this.toString())
                .append(" fav]");
     }
     
     int toValue() {
         return favoritesCount;
+    }
+    
+    @Override
+    public String toString() {
+        return String.valueOf(favoritesCount);
     }
 }
