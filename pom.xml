@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>rtb</groupId>
 	<artifactId>random-tweet-bot</artifactId>
-	<version>0.1</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<build>
 		<sourceDirectory>${basedir}/src</sourceDirectory>
 		<testSourceDirectory>${basedir}/test</testSourceDirectory>
