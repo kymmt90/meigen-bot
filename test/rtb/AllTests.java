@@ -25,6 +25,7 @@ import org.junit.runners.Suite.SuiteClasses;
                FavoritesCountTest.class,
                PopularTweetCollectorTest.class,
                RandomTweetBotTest.class,
+               ScreenName.class,
                TextTest.class,
                TweetDateTest.class})
 public class AllTests {
