@@ -1,4 +1,4 @@
-# 名言 Bot
+# 名言 Bot [![Build Status](https://travis-ci.org/kymmt90/meigen-bot.svg?branch=master)](https://travis-ci.org/kymmt90/meigen-bot)
 
 ## 概要
 
