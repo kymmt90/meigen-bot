@@ -26,15 +26,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import twitter4j.Paging;
-import twitter4j.RateLimitStatus;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PopularTweetCollector {
     private Twitter twitter;
@@ -108,15 +107,5 @@ public class PopularTweetCollector {
         FileWriter   writer = new FileWriter(new File(fileName));
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(writer, pojos);
-    }
-    
-    /**
-     * Get the amount seconds until next rate limiting period for /statuses/user_timeline.
-     * @return the amount of seconds until next rate limiting period
-     * @throws TwitterException
-     */
-    public int getSecondsUntilRateLimitReset() throws TwitterException {
-        RateLimitStatus status = twitter.getRateLimitStatus().get("/statuses/user_timeline");
-        return status.getSecondsUntilReset();
     }
 }

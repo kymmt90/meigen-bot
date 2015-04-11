@@ -16,10 +16,6 @@
 
 package rtb;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,10 +29,5 @@ public class PopularTweetCollectorTest {
     @Test(expected = IllegalArgumentException.class)
     public void if_collectPopularTweets_favthreshold_is_less_than_0_then_throws_IllegalArgumentException() throws Exception {
         sut.collectPopularTweets("", -1, "");
-    }
-
-    @Test
-    public void if_getSecondsUntilRateLimitReset_then_ret_is_equal_to_or_greater_than_0() throws Exception {
-        assertThat(sut.getSecondsUntilRateLimitReset(), is(greaterThanOrEqualTo(0)));
     }
 }
