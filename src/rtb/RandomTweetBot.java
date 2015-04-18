@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -36,6 +39,7 @@ public class RandomTweetBot {
     private Random random;
     private Tweet previousTweet;
     private boolean allowsReply;
+    private Logger logger;
 
     public RandomTweetBot(final boolean reply) {
         twitter       = TwitterFactory.getSingleton();
@@ -43,6 +47,7 @@ public class RandomTweetBot {
         random        = new Random(System.currentTimeMillis());
         previousTweet = null;
         allowsReply   = reply;
+        logger        = LoggerFactory.getLogger(RandomTweetBot.class);
     }
 
     public Tweet getTweet(final int i) {
@@ -94,7 +99,14 @@ public class RandomTweetBot {
     public String updateNextTweet() throws TwitterException {
         Tweet tweet = nextTweet();
         setPrevTweet(tweet);
-        return updateStatus(tweet);
+        try {
+            updateStatus(tweet);
+            logger.info("Tweet \"{}\".", tweet);
+            return tweet.getText();
+        } catch (TwitterException e) {
+            logger.info("Tweet failed.", e);
+            return "";
+        }
     }
     
     /* package */ String updateStatus(Tweet tweet) throws TwitterException {

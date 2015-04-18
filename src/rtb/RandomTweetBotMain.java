@@ -30,6 +30,9 @@ public class RandomTweetBotMain {
             System.err.println("Usage: java -jar random-tweet-bot-<version>.jar <property_file_name>");
             System.exit(1);
         }
+        
+        System.setProperty("org.slf4j.simpleLogger.showDateTime", "true");
+        System.setProperty("org.slf4j.simpleLogger.dateTimeFormat", "[yyyy-MM-dd HH:mm:ss]");
 
         BotProperties properties = new BotProperties();
         try {

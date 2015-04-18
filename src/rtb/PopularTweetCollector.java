@@ -22,9 +22,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import twitter4j.Paging;
 import twitter4j.Status;
@@ -37,9 +41,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PopularTweetCollector {
     private Twitter twitter;
+    private Logger  logger;
     
     public PopularTweetCollector() {
-        twitter  = TwitterFactory.getSingleton();
+        twitter = TwitterFactory.getSingleton();
+        logger  = LoggerFactory.getLogger(PopularTweetCollector.class);
     }
     
     /**
@@ -64,16 +70,25 @@ public class PopularTweetCollector {
      * @throws IOException  
      */
     public List<Status> collectPopularTweets(String userScreenName, final int favThreshold, String fileName)
-            throws TwitterException, JsonParseException, IOException {
+            throws JsonParseException, IOException {
         if (userScreenName == null || fileName == null) throw new NullPointerException();
         if (favThreshold < 0) throw new IllegalArgumentException();
         
         List<Status> tweets = new ArrayList<>();
-        for (int page = 1; ; ++page) {
-            List<Status> statuses = twitter.getUserTimeline(userScreenName, new Paging(page, 200));
-            if (statuses.size() == 0) return tweets;
-            tweets.addAll(statuses.stream().filter(s -> s.getFavoriteCount() >= favThreshold)
-                                           .collect(Collectors.toList()));
+        try {
+            for (int page = 1; ; ++page) {
+                List<Status> statuses = twitter.getUserTimeline(userScreenName, new Paging(page, 200));
+
+                if (statuses.size() == 0) {
+                    logger.info("Collect tweets from {} [fav >= {}].", userScreenName, favThreshold);
+                    return tweets;
+                }
+                tweets.addAll(statuses.stream().filter(s -> s.getFavoriteCount() >= favThreshold)
+                                               .collect(Collectors.toList()));
+            }
+        } catch (TwitterException e) {
+            logger.info("Collect failed.", e);
+            return Collections.emptyList();
         }
     }
         

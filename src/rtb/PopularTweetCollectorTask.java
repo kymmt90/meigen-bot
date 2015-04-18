@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.TimerTask;
 
 import twitter4j.Status;
-import twitter4j.TwitterException;
 
 public class PopularTweetCollectorTask extends TimerTask {
     private String fileName;
@@ -49,8 +48,6 @@ public class PopularTweetCollectorTask extends TimerTask {
         } catch (IOException ioe) {
             ioe.printStackTrace();
             System.exit(1);
-        } catch (TwitterException te) {
-            System.out.println(te.getMessage());
         }
     }
 }
