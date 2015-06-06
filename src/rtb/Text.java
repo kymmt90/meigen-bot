@@ -42,14 +42,11 @@ class Text {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object)
-            return true;
-        if (object == null)
-            return false;
-        if (getClass() != object.getClass())
-            return false;
+        if (this == object) return true;
+        if (object == null) return false;
+        if (getClass() != object.getClass()) return false;
         Text other = (Text)object;
-        return Objects.equals(text, other);
+        return Objects.equals(text.toString(), other.toString());
     }
 
     @Override
