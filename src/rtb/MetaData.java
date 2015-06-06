@@ -24,12 +24,18 @@ class MetaData {
     private FavoritesCount favoritesCount;
     
     MetaData(String screenName, String date, int favoritesCount) {
+        if (screenName == null || date == null) throw new NullPointerException();
+        if (favoritesCount < 0) throw new IllegalArgumentException();
+
         this.screenName = new ScreenName(screenName);
         this.date = new TweetDate(date);
         this.favoritesCount = new FavoritesCount(favoritesCount);
     }
     
     MetaData(String screenName, Date date, int favoritesCount) {
+        if (screenName == null || date == null) throw new NullPointerException();
+        if (favoritesCount < 0) throw new IllegalArgumentException();
+
         this.screenName = new ScreenName(screenName);
         this.date = new TweetDate(date);
         this.favoritesCount = new FavoritesCount(favoritesCount);
@@ -48,14 +54,17 @@ class MetaData {
     }
     
     void addScreenNameTo(StringBuilder builder) {
+        if (builder == null) throw new NullPointerException();
         screenName.addTo(builder);
     }
     
     void addDateTo(StringBuilder builder) {
+        if (builder == null) throw new NullPointerException();
         date.addTo(builder);
     }
     
     void addFavoritesCountTo(StringBuilder builder) {
+        if (builder == null) throw new NullPointerException();
         favoritesCount.addTo(builder);
     }
 }
