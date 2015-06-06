@@ -32,11 +32,15 @@ public class Tweet {
                  @JsonProperty("text") String text,
                  @JsonProperty("date") String date,
                  @JsonProperty("favorites_count") int favoritesCount) {
+        if (screenName == null || text == null || date == null) throw new NullPointerException();
+        if (favoritesCount < 0) throw new IllegalArgumentException();
         this.text = new Text(text);
         this.meta = new MetaData(screenName, date, favoritesCount);
     }
     
     public Tweet(String screenName, String text, Date date, int favoritesCount) {
+        if (screenName == null || text == null || date == null) throw new NullPointerException();
+        if (favoritesCount < 0) throw new IllegalArgumentException();
         this.text = new Text(text);
         this.meta = new MetaData(screenName, date, favoritesCount);
     }
@@ -70,14 +74,11 @@ public class Tweet {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object)
-            return true;
-        if (object == null)
-            return false;
-        if (getClass() != object.getClass())
-            return false;
+        if (this == object) return true;
+        if (object == null) return false;
+        if (getClass() != object.getClass()) return false;
         Tweet other = (Tweet)object;
-        return Objects.equals(text, other);
+        return Objects.equals(text, other.text);
     }
 
     @Override
