@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 import org.junit.Before;
@@ -80,10 +81,25 @@ public class TweetDateTest {
             new TweetDate(str);
         }
         
+        @Test(expected = DateTimeParseException.class)
+        public void constructor_String_empty_string_throws_DateTimeParseException() throws Exception {
+            new TweetDate("");
+        }
+        
+        @Test(expected = DateTimeParseException.class)
+        public void constructor_String_invalid_date_throws_DateTimeParseException() throws Exception {
+            new TweetDate("2015-01-1");
+        }
+        
         @Test(expected = NullPointerException.class)
         public void constructor_Date_null_throws_NullPointerException() throws Exception {
             Date date = null;
             new TweetDate(date);
+        }
+        
+        @Test(expected = NullPointerException.class)
+        public void addTo_null_throws_NullPointerException() throws Exception {
+            new TweetDate("2015-01-01").addTo(null);
         }
     }
 }

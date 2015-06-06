@@ -16,18 +16,46 @@
 
 package rtb;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 
+import twitter4j.Status;
+
+@RunWith(Enclosed.class)
 public class PopularTweetCollectorTest {
-    PopularTweetCollector sut;
-    
-    @Before
-    public void setUp() throws Exception {
-        sut = new PopularTweetCollector();
+    public static class Normal {
+        PopularTweetCollector sut;
+
+        @Before
+        public void setUp() throws Exception {
+            sut = new PopularTweetCollector();
+        }
+
+        @Test
+        public void writeAsJson_statuses_emptyList_invokes_nothing() throws Exception {
+            sut.writeAsJson(Collections.emptyList(), "filename");
+        }
     }
-    @Test(expected = IllegalArgumentException.class)
-    public void if_collectPopularTweets_favthreshold_is_less_than_0_then_throws_IllegalArgumentException() throws Exception {
-        sut.collectPopularTweets("", -1, "");
+
+    public static class Error {
+        @Test(expected = NullPointerException.class)
+        public void writeAsJson_statuses_null_throws_NullPointerException() throws Exception {
+            new PopularTweetCollector().writeAsJson(null, "filename");
+        }
+        
+        @Test(expected = NullPointerException.class)
+        public void writeAsJson_filename_null_throws_NullPointerException() throws Exception {
+            new PopularTweetCollector().writeAsJson(new ArrayList<Status>(), null);
+        }
+        
+        @Test(expected = IllegalArgumentException.class)
+        public void if_collectPopularTweets_favthreshold_is_less_than_0_then_throws_IllegalArgumentException() throws Exception {
+            new PopularTweetCollector().collectPopularTweets("", -1, "");
+        }
     }
 }

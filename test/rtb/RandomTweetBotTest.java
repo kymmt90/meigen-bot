@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 @RunWith(Enclosed.class)
 public class RandomTweetBotTest {
-    public static class JSONファイルsingleを読み込ませた場合 {
+    public static class InitializeWithJsonSingle {
         RandomTweetBot sut;
         int retValreadJsonFile;
 
@@ -42,34 +42,34 @@ public class RandomTweetBotTest {
         }
 
         @Test
-        public void readJsonFileで1が返る() throws Exception {
+        public void readJsonFile_returns_1() throws Exception {
             assertThat(retValreadJsonFile, is(1));
         }
 
         @Test
-        public void nextTweetでテキスト1が返る() throws Exception {
+        public void nextTweet_returns_text_including_1() throws Exception {
             String actual = sut.nextTweet().toString();
             assertThat(actual, is("1 [user] [0 fav] [1990-01-18]"));
         }
 
         @Test
-        public void getTweetで1が返る() throws Exception {
+        public void getTweet_returns_text_including_1() throws Exception {
             String actual = sut.getTweet(0).toString();
             assertThat(actual, is("1 [user] [0 fav] [1990-01-18]"));
         }
 
         @Test(expected = IndexOutOfBoundsException.class)
-        public void getTweetに引数1でIndexOutOfBoundsExceptionが投げられる() throws Exception {
+        public void getTweet_1_throws_IndexOutOfBoundsException() throws Exception {
             sut.getTweet(1);
         }
 
         @Test(expected = IndexOutOfBoundsException.class)
-        public void getTweetに引数2でIndexOutOfBoundsExceptionが投げられる() throws Exception {
+        public void getTweet_2_throws_IndexOutOfBoundsException() throws Exception {
             sut.getTweet(2);
         }
     }
 
-    public static class JSONファイルmultipleを読み込ませた場合 {
+    public static class InitializeWithJsonMultiple {
         RandomTweetBot sut;
         int retValreadJsonFile;
 
@@ -80,22 +80,22 @@ public class RandomTweetBotTest {
         }
 
         @Test
-        public void readJsonFileで2が返る() throws Exception {
+        public void readJsonFile_returns_2() throws Exception {
             assertThat(retValreadJsonFile, is(2));
         }
 
         @Test
-        public void getTweetに引数0で1が得られる() throws Exception {
+        public void getTweet_0_returns_tweet_including_1() throws Exception {
             assertThat(sut.getTweet(0).toString(), is("1 [user] [0 fav] [1990-01-18]"));
         }
 
         @Test
-        public void getTweetに引数1で2が得られる() throws Exception {
+        public void getTweet_1_returns_tweet_including_2() throws Exception {
             assertThat(sut.getTweet(1).toString(), is("2 [user] [0 fav] [1990-01-18]"));
         }
 
         @Test
-        public void extTweetでテキスト1か2が返る() throws Exception {
+        public void nextTweet_retrns_tweet_including_1_or_2() throws Exception {
             boolean one = false, two = false;
             for (int i = 0; i < 100; ++i) {
                 if (sut.nextTweet().toString().equals("1 [user] [0 fav] [1990-01-18]")) one = true;
@@ -106,14 +106,14 @@ public class RandomTweetBotTest {
         }
 
         @Test
-        public void nextTweetでprevTweetと異なるツイートが返る() throws Exception {
+        public void nextTweet_returns_tweet_which_is_different_from_prevTweet() throws Exception {
             sut.setPrevTweet(new Tweet("test", "1", "1990-01-18", 0));
             String actual = sut.nextTweet().toString();
             assertThat(actual, is(not("1")));
         }
     }
 
-    public static class その他の場合 {
+    public static class Error {
         RandomTweetBot sut;
 
         @Before
@@ -122,58 +122,73 @@ public class RandomTweetBotTest {
         }
 
         @Test(expected = JsonMappingException.class)
-        public void readJsonFileにデータがないJSONファイルのパスを渡すとJsonMappingExceptionが投げられる() throws Exception {
+        public void readJsonFile_empty_json_file_throws_JsonMappingException() throws Exception {
             sut.readJsonFile("test/rtb/empty.json");
         }
+
         @Test(expected = IOException.class)
-        public void readJSONFileに存在しないJSONファイルのパスを渡すとIOExceptionが投げられる() throws Exception {
+        public void readJSONFile_not_exit_json_file_throws_IOException() throws Exception {
             sut.readJsonFile("test/rtb/notfound.json");
         }
 
         @Test(expected = JsonProcessingException.class)
-        public void readJSONFileにinvalidなJSONファイルのパスを渡すとJsonProcessingExceptionが投げられる() throws Exception {
+        public void readJSONFile_invalid_json_file_path_throws_JsonProcessingException() throws Exception {
             sut.readJsonFile("test/rtb/invalid.json");
         }
     }
-    
-    public static class JSONファイルreplyを読み込ませreplyがtrueの場合 {
-        RandomTweetBot sut;
-        
-        @Before
-        public void setUp() throws Exception {
-            sut = new RandomTweetBot(true);
-            sut.readJsonFile("test/rtb/reply.json");
-        }
-        
-        @Test
-        public void test() throws Exception {
-            boolean reply = false, notReply = false;
-            for (int i = 0; i < 100; ++i) {
-                if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18]")) reply = true;
-                if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18]")) notReply = true;
+
+    @RunWith(Enclosed.class)
+    public static class InitializeWithJsonReply {
+        public static class ReplyConfIsTrue {
+            RandomTweetBot sut;
+
+            @Before
+            public void setUp() throws Exception {
+                sut = new RandomTweetBot(true);
+                sut.readJsonFile("test/rtb/reply.json");
             }
-            assertThat(reply, is(true));
-            assertThat(notReply, is(true));
+
+            @Test
+            public void nextTweet_returns_both_reply_and_not_reply_tweet() throws Exception {
+                boolean reply = false, notReply = false;
+                for (int i = 0; i < 100; ++i) {
+                    if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18]")) reply = true;
+                    if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18]")) notReply = true;
+                }
+                assertThat(reply, is(true));
+                assertThat(notReply, is(true));
+            }
+            
+            @Test
+            public void allows_reply_tweet_returns_true() throws Exception {
+                assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18", 0)), is(true));
+            }
         }
-    }
-    
-    public static class JSONファイルreplyを読み込ませreplyがfalseの場合 {
-        RandomTweetBot sut;
-        
-        @Before
-        public void setUp() throws Exception {
-            sut = new RandomTweetBot(false);
-            sut.readJsonFile("test/rtb/reply.json");
-        }
-        
-        @Test
-        public void test_getTweet() throws Exception {
-            assertThat(sut.nextTweet().toString(), is(".@test_user test [user] [0 fav] [1990-01-18]"));
-        }
-        
-        @Test
-        public void test_acceptTweet() throws Exception {
-            assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18", 0)), is(false));
+
+        public static class ReplyConfIsFalse {
+            RandomTweetBot sut;
+
+            @Before
+            public void setUp() throws Exception {
+                sut = new RandomTweetBot(false);
+                sut.readJsonFile("test/rtb/reply.json");
+            }
+
+            @Test
+            public void nextTweet_returns_only_not_reply_tweet() throws Exception {
+                boolean reply = false, notReply = false;
+                for (int i = 0; i < 100; ++i) {
+                    if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18]")) reply = true;
+                    if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18]")) notReply = true;
+                }
+                assertThat(reply, is(false));
+                assertThat(notReply, is(true));
+            }
+
+            @Test
+            public void allows_reply_tweet_returns_false() throws Exception {
+                assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18", 0)), is(false));
+            }
         }
     }
 }

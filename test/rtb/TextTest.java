@@ -50,6 +50,31 @@ public class TextTest {
         public void isReply_returns_false() {
             assertThat(sut.isReply(), is(false));
         }
+        
+        @Test
+        public void equals_this_retuns_true() {
+            assertThat(sut.equals(sut), is(true));
+        }
+        
+        @Test
+        public void equals_null_retuns_false() {
+            assertThat(sut.equals(null), is(false));
+        }
+        
+        @Test
+        public void equals_test_returns_true() {
+            assertThat(sut.equals(new Text("test")), is(true));
+        }
+        
+        @Test
+        public void equals_String_returns_false() {
+            assertThat(sut.equals("@user test"), is(false));
+        }
+        
+        @Test
+        public void hashCode_test() {
+            assertThat(sut.hashCode(), is(new Text("test").hashCode()));
+        }
     }
     
     public static class Reply {
@@ -75,6 +100,21 @@ public class TextTest {
         @Test
         public void isReply_returns_true() {
             assertThat(sut.isReply(), is(true));
+        }
+        
+        @Test
+        public void equals_test_returns_true() {
+            assertThat(sut.equals(new Text("@user test")), is(true));
+        }
+        
+        @Test
+        public void equals_String_returns_false() {
+            assertThat(sut.equals("@user test"), is(false));
+        }
+        
+        @Test
+        public void hashCode_test() {
+            assertThat(sut.hashCode(), is(new Text("@user test").hashCode()));
         }
     }
     
