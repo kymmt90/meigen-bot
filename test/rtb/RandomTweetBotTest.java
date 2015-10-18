@@ -49,13 +49,13 @@ public class RandomTweetBotTest {
         @Test
         public void nextTweet_returns_text_including_1() throws Exception {
             String actual = sut.nextTweet().toString();
-            assertThat(actual, is("1 [user] [0 fav] [1990-01-18]"));
+            assertThat(actual, is("1 [user] [0 fav] [1990-01-18 01:23]"));
         }
 
         @Test
         public void getTweet_returns_text_including_1() throws Exception {
             String actual = sut.getTweet(0).toString();
-            assertThat(actual, is("1 [user] [0 fav] [1990-01-18]"));
+            assertThat(actual, is("1 [user] [0 fav] [1990-01-18 01:23]"));
         }
 
         @Test(expected = IndexOutOfBoundsException.class)
@@ -86,20 +86,20 @@ public class RandomTweetBotTest {
 
         @Test
         public void getTweet_0_returns_tweet_including_1() throws Exception {
-            assertThat(sut.getTweet(0).toString(), is("1 [user] [0 fav] [1990-01-18]"));
+            assertThat(sut.getTweet(0).toString(), is("1 [user] [0 fav] [1990-01-18 01:23]"));
         }
 
         @Test
         public void getTweet_1_returns_tweet_including_2() throws Exception {
-            assertThat(sut.getTweet(1).toString(), is("2 [user] [0 fav] [1990-01-18]"));
+            assertThat(sut.getTweet(1).toString(), is("2 [user] [0 fav] [1990-01-18 01:23]"));
         }
 
         @Test
         public void nextTweet_retrns_tweet_including_1_or_2() throws Exception {
             boolean one = false, two = false;
             for (int i = 0; i < 100; ++i) {
-                if (sut.nextTweet().toString().equals("1 [user] [0 fav] [1990-01-18]")) one = true;
-                if (sut.nextTweet().toString().equals("2 [user] [0 fav] [1990-01-18]")) two = true;
+                if (sut.nextTweet().toString().equals("1 [user] [0 fav] [1990-01-18 01:23]")) one = true;
+                if (sut.nextTweet().toString().equals("2 [user] [0 fav] [1990-01-18 01:23]")) two = true;
             }
             assertThat(one, is(true));
             assertThat(two, is(true));
@@ -107,7 +107,7 @@ public class RandomTweetBotTest {
 
         @Test
         public void nextTweet_returns_tweet_which_is_different_from_prevTweet() throws Exception {
-            sut.setPrevTweet(new Tweet("test", "1", "1990-01-18", 0));
+            sut.setPrevTweet(new Tweet("test", "1", "1990-01-18 01:23", 0));
             String actual = sut.nextTweet().toString();
             assertThat(actual, is(not("1")));
         }
@@ -152,16 +152,16 @@ public class RandomTweetBotTest {
             public void nextTweet_returns_both_reply_and_not_reply_tweet() throws Exception {
                 boolean reply = false, notReply = false;
                 for (int i = 0; i < 100; ++i) {
-                    if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18]")) reply = true;
-                    if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18]")) notReply = true;
+                    if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18 01:23]")) reply = true;
+                    if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18 01:23]")) notReply = true;
                 }
                 assertThat(reply, is(true));
                 assertThat(notReply, is(true));
             }
-            
+
             @Test
             public void allows_reply_tweet_returns_true() throws Exception {
-                assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18", 0)), is(true));
+                assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18 01:23", 0)), is(true));
             }
         }
 
@@ -178,8 +178,8 @@ public class RandomTweetBotTest {
             public void nextTweet_returns_only_not_reply_tweet() throws Exception {
                 boolean reply = false, notReply = false;
                 for (int i = 0; i < 100; ++i) {
-                    if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18]")) reply = true;
-                    if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18]")) notReply = true;
+                    if (sut.nextTweet().toString().equals("@test_user test [user] [0 fav] [1990-01-18 01:23]")) reply = true;
+                    if (sut.nextTweet().toString().equals(".@test_user test [user] [0 fav] [1990-01-18 01:23]")) notReply = true;
                 }
                 assertThat(reply, is(false));
                 assertThat(notReply, is(true));
@@ -187,7 +187,7 @@ public class RandomTweetBotTest {
 
             @Test
             public void allows_reply_tweet_returns_false() throws Exception {
-                assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18", 0)), is(false));
+                assertThat(sut.allows(new Tweet("test", "@test_user test", "1990-01-18 01:23", 0)), is(false));
             }
         }
     }

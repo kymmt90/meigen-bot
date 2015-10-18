@@ -21,7 +21,7 @@ public class TweetTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new Tweet("user", "test", "2015-01-01", 0);
+            sut = new Tweet("user", "test", "2015-01-01 01:23", 0);
         }
 
         @Test
@@ -36,7 +36,7 @@ public class TweetTest {
 
         @Test
         public void getDate_returns_2015_01_01() throws Exception {
-            assertThat(sut.getDate(), is("2015-01-01"));
+            assertThat(sut.getDate(), is("2015-01-01 01:23"));
         }
 
         @Test
@@ -51,7 +51,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01]"));
+            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01 01:23]"));
         }
 
         @Test
@@ -71,7 +71,7 @@ public class TweetTest {
 
         @Test
         public void equals_returns_true() throws Exception {
-            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01", 0)), is(true));
+            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01 01:23", 0)), is(true));
         }
     }
 
@@ -80,7 +80,7 @@ public class TweetTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new Tweet("user", "@user test", "2015-01-01", 0);
+            sut = new Tweet("user", "@user test", "2015-01-01 01:23", 0);
         }
 
         @Test
@@ -91,26 +91,26 @@ public class TweetTest {
 
     public static class InitializeWithDate {
         Tweet sut;
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         @Before
         public void setUp() throws Exception {
-            sut = new Tweet("user", "test", format.parse("2015-01-01"), 0);
+            sut = new Tweet("user", "test", format.parse("2015-01-01 01:23"), 0);
         }
 
         @Test
         public void getDate_returns_2015_01_01() throws Exception {
-            assertThat(sut.getDate(), is("2015-01-01"));
+            assertThat(sut.getDate(), is("2015-01-01 01:23"));
         }
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01]"));
+            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01 01:23]"));
         }
 
         @Test
         public void equals_returns_true() throws Exception {
-            assertThat(sut.equals(new Tweet("user", "test", format.parse("2015-01-01"), 0)), is(true));
+            assertThat(sut.equals(new Tweet("user", "test", format.parse("2015-01-01 01:23"), 0)), is(true));
         }
     }
 
@@ -121,12 +121,12 @@ public class TweetTest {
         public void setup() throws Exception {
             ObjectMapper mapper = new ObjectMapper();
             String jsonData = "{\"screenName\":\"user\","
-                            + "\"text\":\"test\","       
-                            + "\"date\":\"2015-01-01\","
+                            + "\"text\":\"test\","
+                            + "\"date\":\"2015-01-01 01:23\","
                             + "\"favorites_count\":0}";
             sut = mapper.readValue(jsonData, Tweet.class);
         }
-        
+
         @Test
         public void getScreenName_returns_user() throws Exception {
             assertThat(sut.getScreenName(), is("user"));
@@ -139,7 +139,7 @@ public class TweetTest {
 
         @Test
         public void getDate_returns_2015_01_01() throws Exception {
-            assertThat(sut.getDate(), is("2015-01-01"));
+            assertThat(sut.getDate(), is("2015-01-01 01:23"));
         }
 
         @Test
@@ -154,7 +154,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01]"));
+            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01 01:23]"));
         }
 
         @Test
@@ -174,56 +174,56 @@ public class TweetTest {
 
         @Test
         public void equals_returns_true() throws Exception {
-            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01", 0)), is(true));
+            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01 01:23", 0)), is(true));
         }
     }
-    
+
     @RunWith(Enclosed.class)
     public static class Error {
         public static class UsingStringDate {
             @Test(expected = NullPointerException.class)
             public void constructor_screenName_null_throws_NullPointerException() throws Exception {
-                new Tweet(null, "test", "2015-01-01", 0);
+                new Tweet(null, "test", "2015-01-01 01:23", 0);
             }
-            
+
             @Test(expected = NullPointerException.class)
             public void constructor_text_null_throws_NullPointerException() throws Exception {
-                new Tweet("user", null, "2015-01-01", 0);
+                new Tweet("user", null, "2015-01-01 01:23", 0);
             }
-            
+
             @Test(expected = NullPointerException.class)
             public void constructor_date_null_throws_NullPointerException() throws Exception {
                 String date = null;
                 new Tweet("user", "test", date, 0);
             }
-            
+
             @Test(expected = IllegalArgumentException.class)
             public void constructor_favoritesCount_minus_1_throws_NullPointerException() throws Exception {
-                new Tweet("user", "test", "2015-01-01", -1);
+                new Tweet("user", "test", "2015-01-01 01:23", -1);
             }
         }
-        
+
         public static class UsingDate {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
             @Test(expected = NullPointerException.class)
             public void constructor_screenName_null_throws_NullPointerException() throws Exception {
-                new Tweet(null, "test", format.parse("2015-01-01"), 0);
+                new Tweet(null, "test", format.parse("2015-01-01 01:23"), 0);
             }
-            
+
             @Test(expected = NullPointerException.class)
             public void constructor_text_null_throws_NullPointerException() throws Exception {
-                new Tweet("user", null, format.parse("2015-01-01"), 0);
+                new Tweet("user", null, format.parse("2015-01-01 01:23"), 0);
             }
-            
+
             @Test(expected = NullPointerException.class)
             public void constructor_date_null_throws_NullPointerException() throws Exception {
                 new Tweet("user", "test", (Date)null, 0);
             }
-            
+
             @Test(expected = IllegalArgumentException.class)
             public void constructor_favoritesCount_minus_1_throws_NullPointerException() throws Exception {
-                new Tweet("user", "test", format.parse("2015-01-01"), -1);
+                new Tweet("user", "test", format.parse("2015-01-01 01:23"), -1);
             }
         }
     }

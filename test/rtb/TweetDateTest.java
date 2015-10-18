@@ -33,73 +33,73 @@ import org.junit.runner.RunWith;
 public class TweetDateTest {
     public static class InitializeWithString {
         TweetDate sut;
-        
+
         @Before
         public void setUp() throws Exception {
-            sut = new TweetDate("2015-01-01");
+            sut = new TweetDate("2015-01-01 01:23");
         }
-        
+
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("2015-01-01"));
+            assertThat(sut.toString(), is("2015-01-01 01:23"));
         }
-        
+
         @Test
         public void addTo_appends_date_to_builder() throws Exception {
             StringBuilder builder = new StringBuilder();
             sut.addTo(builder);
-            assertThat(builder.toString(), is("[2015-01-01]"));
+            assertThat(builder.toString(), is("[2015-01-01 01:23]"));
         }
     }
-    
+
     public static class InitializeWithDate {
         TweetDate sut;
-        
+
         @Before
         public void setUp() throws Exception {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            sut = new TweetDate(format.parse("2015-01-01"));
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            sut = new TweetDate(format.parse("2015-01-01 01:23"));
         }
-        
+
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("2015-01-01"));
+            assertThat(sut.toString(), is("2015-01-01 01:23"));
         }
-        
+
         @Test
         public void addTo_appends_date_to_builder() throws Exception {
             StringBuilder builder = new StringBuilder();
             sut.addTo(builder);
-            assertThat(builder.toString(), is("[2015-01-01]"));
+            assertThat(builder.toString(), is("[2015-01-01 01:23]"));
         }
     }
-    
+
     public static class Error {
         @Test(expected = NullPointerException.class)
         public void constructor_String_null_throws_NullPointerException() throws Exception {
             String str = null;
             new TweetDate(str);
         }
-        
+
         @Test(expected = DateTimeParseException.class)
         public void constructor_String_empty_string_throws_DateTimeParseException() throws Exception {
             new TweetDate("");
         }
-        
+
         @Test(expected = DateTimeParseException.class)
         public void constructor_String_invalid_date_throws_DateTimeParseException() throws Exception {
             new TweetDate("2015-01-1");
         }
-        
+
         @Test(expected = NullPointerException.class)
         public void constructor_Date_null_throws_NullPointerException() throws Exception {
             Date date = null;
             new TweetDate(date);
         }
-        
+
         @Test(expected = NullPointerException.class)
         public void addTo_null_throws_NullPointerException() throws Exception {
-            new TweetDate("2015-01-01").addTo(null);
+            new TweetDate("2015-01-01 01:23").addTo(null);
         }
     }
 }

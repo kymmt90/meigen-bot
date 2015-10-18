@@ -42,12 +42,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PopularTweetCollector {
     private Twitter twitter;
     private Logger  logger;
-    
+
     public PopularTweetCollector() {
         twitter = TwitterFactory.getSingleton();
         logger  = LoggerFactory.getLogger(PopularTweetCollector.class);
     }
-    
+
     /**
      * Get the date of latest status of the user.
      * @param userScreenName the screen name of user
@@ -58,7 +58,7 @@ public class PopularTweetCollector {
         if (userScreenName == null) throw new NullPointerException();
         return twitter.getUserTimeline(userScreenName, new Paging(1, 1)).get(0).getCreatedAt();
     }
-    
+
     /**
      * Write out the list of popular tweets in JSON form. Each tweet in the list has the number of favs which is greater than favThreshold.
      * @param userScreenName the screen name of user
@@ -67,13 +67,13 @@ public class PopularTweetCollector {
      * @return the list of statuses
      * @throws TwitterException
      * @throws JsonParseException
-     * @throws IOException  
+     * @throws IOException
      */
     public List<Status> collectPopularTweets(String userScreenName, final int favThreshold, String fileName)
             throws JsonParseException, IOException {
         if (userScreenName == null || fileName == null) throw new NullPointerException();
         if (favThreshold < 0) throw new IllegalArgumentException();
-        
+
         List<Status> tweets = new ArrayList<>();
         try {
             for (int page = 1; ; ++page) {
@@ -91,9 +91,9 @@ public class PopularTweetCollector {
             return Collections.emptyList();
         }
     }
-        
+
     /**
-     * Write out the list of tweets to JSON form. 
+     * Write out the list of tweets to JSON form.
      * @param statuses the list of statuses
      * @param fileName JSON file name
      * @throws JsonParseException
@@ -108,16 +108,16 @@ public class PopularTweetCollector {
         for (Status s : statuses) {
             // Get tweet text
             String text = s.getText().replaceAll("[\n\t]", " ");
-            
+
             // Get formatted date text
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String date = formatter.format(s.getCreatedAt());
-            
+
             String screenName = s.getUser().getScreenName();
-            
+
             pojos.add(new Tweet(screenName, text, date, s.getFavoriteCount()));
         }
-        
+
         // Write out TweetPojo as JSON
         FileWriter   writer = new FileWriter(new File(fileName));
         ObjectMapper mapper = new ObjectMapper();
