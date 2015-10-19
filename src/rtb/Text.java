@@ -17,24 +17,68 @@
 package rtb;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+import twitter4j.TwitterAPIConfiguration;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 
 class Text {
+    private static String URLRegex
+        = "(http(s)?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
+    public static int charactersReservedPerMedia;
+    public static int shortURLLength;
+    public static int shortURLLengthHttps;
+
+    static {
+        TwitterAPIConfiguration config = null;
+        try {
+            config = TwitterFactory.getSingleton().getAPIConfiguration();
+        } catch (TwitterException te) {
+            te.printStackTrace();
+        }
+        charactersReservedPerMedia = config.getCharactersReservedPerMedia();
+        shortURLLength             = config.getShortURLLength();
+        shortURLLengthHttps        = config.getShortURLLengthHttps();
+    }
+
     private String text;
-    
+    private int length;
+
     Text(String text) {
         if (text == null) throw new NullPointerException();
         this.text = text;
+
+        final int numURL = countURL(text);
+        this.length = numURL * shortURLLength + removeURL(text).length();
     }
-    
+
+    int countURL(String text) {
+        Matcher matcher = Pattern.compile(URLRegex).matcher(text);
+        int numURL = 0;
+        while (matcher.find()) ++numURL;
+        return numURL;
+    }
+
+    String removeURL(String text) {
+        Matcher matcher = Pattern.compile(URLRegex).matcher(text);
+        return matcher.replaceAll("");
+    }
+
     void addTo(StringBuilder builder) {
         if (builder == null) throw new NullPointerException();
         builder.append(text);
     }
-    
+
     boolean isReply() {
         return text.charAt(0) == '@';
     }
-    
+
+    int length() {
+        return length;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(text);
