@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Tweet {
     private Text text;
     private MetaData meta;
-    
+
     @JsonCreator
     public Tweet(@JsonProperty("screenName") String screenName,
                  @JsonProperty("text") String text,
@@ -37,7 +37,7 @@ public class Tweet {
         this.text = new Text(text);
         this.meta = new MetaData(screenName, date, favoritesCount);
     }
-    
+
     public Tweet(String screenName, String text, Date date, int favoritesCount) {
         if (screenName == null || text == null || date == null) throw new NullPointerException();
         if (favoritesCount < 0) throw new IllegalArgumentException();
@@ -48,7 +48,7 @@ public class Tweet {
     public String getScreenName() {
         return meta.getScreenName();
     }
-    
+
     public String getText() {
         return text.toString();
     }
@@ -61,12 +61,12 @@ public class Tweet {
     public int getFavoritesCount() {
         return meta.getFavoritesCount();
     }
-    
+
     @JsonIgnore
     public boolean isReply() {
         return text.isReply();
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(text);
@@ -84,13 +84,16 @@ public class Tweet {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        text.addTo(builder);
         builder.append(" ");
         meta.addScreenNameTo(builder);
         builder.append(" ");
         meta.addFavoritesCountTo(builder);
         builder.append(" ");
         meta.addDateTo(builder);
-        return builder.toString();
+
+        final int metaLength = builder.toString().length();
+        return text.length() + metaLength > 140
+             ? text.toString()
+             : text.toString() + builder.toString();
     }
 }

@@ -89,6 +89,28 @@ public class TweetTest {
         }
     }
 
+    public static class TooLongTextWithoutMetaData {
+        Tweet sut;
+
+        // Text length is 130, so no space for meta data
+        final String tooLongText = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        // Text length is 111 + Text.shortURLLength, so no space for meta data
+        final String tooLongTextWithURL = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa http://example.com";
+
+        @Test
+        public void tweet_text_only_includes_text() throws Exception {
+            sut = new Tweet("user", tooLongText, "2015-01-01 01:23", 0);
+            assertThat(sut.toString(), is(tooLongText));
+        }
+
+        @Test
+        public void tweet_text_only_includes_text_and_URL() throws Exception {
+            sut = new Tweet("user", tooLongTextWithURL, "2015-01-01 01:23", 0);
+            assertThat(sut.toString(), is(tooLongTextWithURL));
+        }
+    }
+
     public static class InitializeWithDate {
         Tweet sut;
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
