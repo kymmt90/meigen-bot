@@ -55,7 +55,7 @@ public class MetaDataTest {
         public void addFavoritesCount_appends_favoritesCount_to_builder() throws Exception {
             StringBuilder builder = new StringBuilder();
             sut.addFavoritesCountTo(builder);
-            assertThat(builder.toString(), is("[0 fav]"));
+            assertThat(builder.toString(), is("[0 like]"));
         }
     }
 

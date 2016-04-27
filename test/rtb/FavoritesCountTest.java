@@ -38,7 +38,8 @@ public class FavoritesCountTest {
             FavoritesCount sut = new FavoritesCount(favoritesCount);
             StringBuilder builder = new StringBuilder();
             sut.addTo(builder);
-            assertThat(builder.toString(), is("[" + favoritesCount + " fav]"));
+            String unit = favoritesCount > 1 ? " likes]" : " like]";
+            assertThat(builder.toString(), is("[" + favoritesCount + unit));
         }
 
         @Theory
@@ -47,13 +48,13 @@ public class FavoritesCountTest {
             assertThat(sut.toValue(), is(favoritesCount));
         }
     }
-    
+
     public static class Error {
         @Test(expected = IllegalArgumentException.class)
         public void constructor_minus_1_throws_IllegalArgumentException() throws Exception {
             new FavoritesCount(-1);
         }
-        
+
         @Test(expected = NullPointerException.class)
         public void addTo_null_throws_NullPointerException() throws Exception {
             FavoritesCount sut = new FavoritesCount(0);

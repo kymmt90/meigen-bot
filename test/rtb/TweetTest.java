@@ -51,7 +51,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01 01:23]"));
+            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23]"));
         }
 
         @Test
@@ -127,7 +127,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01 01:23]"));
+            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23]"));
         }
 
         @Test
@@ -176,7 +176,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 fav] [2015-01-01 01:23]"));
+            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23]"));
         }
 
         @Test
