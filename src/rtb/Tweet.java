@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Tweet {
+    public static int NUM_CHARS_UPPER_LIMIT = 140;
+
     private Text text;
     private MetaData meta;
 
@@ -31,18 +33,19 @@ public class Tweet {
     public Tweet(@JsonProperty("screenName") String screenName,
                  @JsonProperty("text") String text,
                  @JsonProperty("date") String date,
-                 @JsonProperty("favorites_count") int favoritesCount) {
-        if (screenName == null || text == null || date == null) throw new NullPointerException();
+                 @JsonProperty("favorites_count") int favoritesCount,
+                 @JsonProperty("url") String url) {
+        if (screenName == null || text == null || date == null || url == null) throw new NullPointerException();
         if (favoritesCount < 0) throw new IllegalArgumentException();
         this.text = new Text(text);
-        this.meta = new MetaData(screenName, date, favoritesCount);
+        this.meta = new MetaData(screenName, date, favoritesCount, url);
     }
 
-    public Tweet(String screenName, String text, Date date, int favoritesCount) {
-        if (screenName == null || text == null || date == null) throw new NullPointerException();
+    public Tweet(String screenName, String text, Date date, int favoritesCount, String url) {
+        if (screenName == null || text == null || date == null || url == null) throw new NullPointerException();
         if (favoritesCount < 0) throw new IllegalArgumentException();
         this.text = new Text(text);
-        this.meta = new MetaData(screenName, date, favoritesCount);
+        this.meta = new MetaData(screenName, date, favoritesCount, url);
     }
 
     public String getScreenName() {
@@ -55,6 +58,10 @@ public class Tweet {
 
     public String getDate() {
         return meta.getDate();
+    }
+
+    public String getUrl() {
+        return meta.getUrl();
     }
 
     @JsonProperty("favorites_count")
@@ -90,9 +97,11 @@ public class Tweet {
         meta.addFavoritesCountTo(builder);
         builder.append(" ");
         meta.addDateTo(builder);
+        builder.append(" ");
+        meta.addURLTo(builder);
 
-        final int metaLength = builder.toString().length();
-        return text.length() + metaLength > 140
+        final int metaLength = builder.toString().length() - meta.getUrl().length();
+        return text.length() + metaLength > NUM_CHARS_UPPER_LIMIT
              ? text.toString()
              : text.toString() + builder.toString();
     }

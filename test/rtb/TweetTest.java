@@ -21,7 +21,7 @@ public class TweetTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new Tweet("user", "test", "2015-01-01 01:23", 0);
+            sut = new Tweet("user", "test", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
         }
 
         @Test
@@ -51,7 +51,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23]"));
+            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23] https://twitter.com/null/0000000000"));
         }
 
         @Test
@@ -71,7 +71,7 @@ public class TweetTest {
 
         @Test
         public void equals_returns_true() throws Exception {
-            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01 01:23", 0)), is(true));
+            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000")), is(true));
         }
     }
 
@@ -80,7 +80,7 @@ public class TweetTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new Tweet("user", "@user test", "2015-01-01 01:23", 0);
+            sut = new Tweet("user", "@user test", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
         }
 
         @Test
@@ -100,13 +100,13 @@ public class TweetTest {
 
         @Test
         public void tweet_text_only_includes_text() throws Exception {
-            sut = new Tweet("user", tooLongText, "2015-01-01 01:23", 0);
+            sut = new Tweet("user", tooLongText, "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
             assertThat(sut.toString(), is(tooLongText));
         }
 
         @Test
         public void tweet_text_only_includes_text_and_URL() throws Exception {
-            sut = new Tweet("user", tooLongTextWithURL, "2015-01-01 01:23", 0);
+            sut = new Tweet("user", tooLongTextWithURL, "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
             assertThat(sut.toString(), is(tooLongTextWithURL));
         }
     }
@@ -117,7 +117,7 @@ public class TweetTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new Tweet("user", "test", format.parse("2015-01-01 01:23"), 0);
+            sut = new Tweet("user", "test", format.parse("2015-01-01 01:23"), 0, "https://twitter.com/null/0000000000");
         }
 
         @Test
@@ -127,12 +127,12 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23]"));
+            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23] https://twitter.com/null/0000000000"));
         }
 
         @Test
         public void equals_returns_true() throws Exception {
-            assertThat(sut.equals(new Tweet("user", "test", format.parse("2015-01-01 01:23"), 0)), is(true));
+            assertThat(sut.equals(new Tweet("user", "test", format.parse("2015-01-01 01:23"), 0, "https://twitter.com/null/0000000000")), is(true));
         }
     }
 
@@ -145,7 +145,8 @@ public class TweetTest {
             String jsonData = "{\"screenName\":\"user\","
                             + "\"text\":\"test\","
                             + "\"date\":\"2015-01-01 01:23\","
-                            + "\"favorites_count\":0}";
+                            + "\"favorites_count\":0,"
+                            + "\"url\":\"https://twitter.com/null/0000000000\"}";
             sut = mapper.readValue(jsonData, Tweet.class);
         }
 
@@ -176,7 +177,7 @@ public class TweetTest {
 
         @Test
         public void toString_test() throws Exception {
-            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23]"));
+            assertThat(sut.toString(), is("test [user] [0 like] [2015-01-01 01:23] https://twitter.com/null/0000000000"));
         }
 
         @Test
@@ -196,7 +197,7 @@ public class TweetTest {
 
         @Test
         public void equals_returns_true() throws Exception {
-            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01 01:23", 0)), is(true));
+            assertThat(sut.equals(new Tweet("user", "test", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000")), is(true));
         }
     }
 
@@ -205,23 +206,23 @@ public class TweetTest {
         public static class UsingStringDate {
             @Test(expected = NullPointerException.class)
             public void constructor_screenName_null_throws_NullPointerException() throws Exception {
-                new Tweet(null, "test", "2015-01-01 01:23", 0);
+                new Tweet(null, "test", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void constructor_text_null_throws_NullPointerException() throws Exception {
-                new Tweet("user", null, "2015-01-01 01:23", 0);
+                new Tweet("user", null, "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void constructor_date_null_throws_NullPointerException() throws Exception {
                 String date = null;
-                new Tweet("user", "test", date, 0);
+                new Tweet("user", "test", date, 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = IllegalArgumentException.class)
             public void constructor_favoritesCount_minus_1_throws_NullPointerException() throws Exception {
-                new Tweet("user", "test", "2015-01-01 01:23", -1);
+                new Tweet("user", "test", "2015-01-01 01:23", -1, "https://twitter.com/null/0000000000");
             }
         }
 
@@ -230,22 +231,22 @@ public class TweetTest {
 
             @Test(expected = NullPointerException.class)
             public void constructor_screenName_null_throws_NullPointerException() throws Exception {
-                new Tweet(null, "test", format.parse("2015-01-01 01:23"), 0);
+                new Tweet(null, "test", format.parse("2015-01-01 01:23"), 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void constructor_text_null_throws_NullPointerException() throws Exception {
-                new Tweet("user", null, format.parse("2015-01-01 01:23"), 0);
+                new Tweet("user", null, format.parse("2015-01-01 01:23"), 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void constructor_date_null_throws_NullPointerException() throws Exception {
-                new Tweet("user", "test", (Date)null, 0);
+                new Tweet("user", "test", (Date)null, 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = IllegalArgumentException.class)
             public void constructor_favoritesCount_minus_1_throws_NullPointerException() throws Exception {
-                new Tweet("user", "test", format.parse("2015-01-01 01:23"), -1);
+                new Tweet("user", "test", format.parse("2015-01-01 01:23"), -1, "https://twitter.com/null/0000000000");
             }
         }
     }

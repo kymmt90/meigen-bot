@@ -22,23 +22,26 @@ class MetaData {
     private ScreenName screenName; 
     private TweetDate date;
     private FavoritesCount favoritesCount;
+    private String url;
     
-    MetaData(String screenName, String date, int favoritesCount) {
-        if (screenName == null || date == null) throw new NullPointerException();
+    MetaData(String screenName, String date, int favoritesCount, String url) {
+        if (screenName == null || date == null || url == null) throw new NullPointerException();
         if (favoritesCount < 0) throw new IllegalArgumentException();
 
         this.screenName = new ScreenName(screenName);
         this.date = new TweetDate(date);
         this.favoritesCount = new FavoritesCount(favoritesCount);
+        this.url = url;
     }
     
-    MetaData(String screenName, Date date, int favoritesCount) {
+    MetaData(String screenName, Date date, int favoritesCount, String url) {
         if (screenName == null || date == null) throw new NullPointerException();
         if (favoritesCount < 0) throw new IllegalArgumentException();
 
         this.screenName = new ScreenName(screenName);
         this.date = new TweetDate(date);
         this.favoritesCount = new FavoritesCount(favoritesCount);
+        this.url = url;
     }
     
     String getScreenName() {
@@ -53,6 +56,10 @@ class MetaData {
         return favoritesCount.toValue();
     }
     
+    String getUrl() {
+        return url;
+    }
+
     void addScreenNameTo(StringBuilder builder) {
         if (builder == null) throw new NullPointerException();
         screenName.addTo(builder);
@@ -66,5 +73,10 @@ class MetaData {
     void addFavoritesCountTo(StringBuilder builder) {
         if (builder == null) throw new NullPointerException();
         favoritesCount.addTo(builder);
+    }
+
+    void addURLTo(StringBuilder builder) {
+        if (builder == null) throw new NullPointerException();
+        builder.append(url);
     }
 }

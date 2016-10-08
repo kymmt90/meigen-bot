@@ -115,12 +115,16 @@ public class PopularTweetCollector {
 
             String screenName = s.getUser().getScreenName();
 
-            pojos.add(new Tweet(screenName, text, date, s.getFavoriteCount()));
+            pojos.add(new Tweet(screenName, text, date, s.getFavoriteCount(), getTweetURL(s)));
         }
 
         // Write out TweetPojo as JSON
         FileWriter   writer = new FileWriter(new File(fileName));
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(writer, pojos);
+    }
+
+    private String getTweetURL(Status status) {
+        return "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId();
     }
 }

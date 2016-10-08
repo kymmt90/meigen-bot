@@ -19,7 +19,7 @@ public class MetaDataTest {
 
         @Before
         public void setUp() throws Exception {
-            sut = new MetaData("user", "2015-01-01 01:23", 0);
+            sut = new MetaData("user", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
         }
 
         @Test
@@ -65,7 +65,7 @@ public class MetaDataTest {
         @Before
         public void setUp() throws Exception {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            sut = new MetaData("user", format.parse("2015-01-01 01:23"), 0);
+            sut = new MetaData("user", format.parse("2015-01-01 01:23"), 0, "https://twitter.com/null/0000000000");
         }
 
         @Test
@@ -86,32 +86,32 @@ public class MetaDataTest {
         public static class UsingStringDate {
             @Test(expected = NullPointerException.class)
             public void constructor_screetName_null_throws_NullPointerException() throws Exception {
-                new MetaData(null, "2015-01-01 01:23", 0);
+                new MetaData(null, "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void constructor_Date_null_throws_NullPointerException() throws Exception {
-                new MetaData("user", (String)null, 0);
+                new MetaData("user", (String)null, 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = IllegalArgumentException.class)
             public void constructor_favoritesCount_minus_1_throws_IllegalArgumentException() throws Exception {
-                new MetaData("user", "2015-01-01 01:23", -1);
+                new MetaData("user", "2015-01-01 01:23", -1, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void addScreenNameTo_null_throws_NullPointerException() throws Exception {
-                new MetaData("user", "2015-01-01 01:23", 0).addScreenNameTo(null);
+                new MetaData("user", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000").addScreenNameTo(null);
             }
 
             @Test(expected = NullPointerException.class)
             public void addDateTo_null_throws_NullPointerException() throws Exception {
-                new MetaData("user", "2015-01-01 01:23", 0).addDateTo(null);
+                new MetaData("user", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000").addDateTo(null);
             }
 
             @Test(expected = NullPointerException.class)
             public void addFavoritesCountTo_null_throws_NullPointerException() throws Exception {
-                new MetaData("user", "2015-01-01 01:23", 0).addFavoritesCountTo(null);
+                new MetaData("user", "2015-01-01 01:23", 0, "https://twitter.com/null/0000000000").addFavoritesCountTo(null);
             }
         }
 
@@ -125,17 +125,17 @@ public class MetaDataTest {
 
             @Test(expected = NullPointerException.class)
             public void constructor_screetName_null_throws_NullPointerException() throws Exception {
-                new MetaData(null, format.parse("2015-01-01 01:23"), 0);
+                new MetaData(null, format.parse("2015-01-01 01:23"), 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = NullPointerException.class)
             public void constructor_Date_null_throws_NullPointerException() throws Exception {
-                new MetaData("user", (Date)null, 0);
+                new MetaData("user", (Date)null, 0, "https://twitter.com/null/0000000000");
             }
 
             @Test(expected = IllegalArgumentException.class)
             public void constructor_favoritesCount_minus_1_throws_IllegalArgumentException() throws Exception {
-                new MetaData("user", format.parse("2015-01-01 01:23"), -1);
+                new MetaData("user", format.parse("2015-01-01 01:23"), -1, "https://twitter.com/null/0000000000");
             }
         }
     }
